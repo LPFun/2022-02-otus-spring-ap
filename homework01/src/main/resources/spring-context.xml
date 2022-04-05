@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="questionCsvParser" class="ru.lpfun.spring.homework01.parser.QuestionsCsvParserImpl">
+    </bean>
+
+    <bean id="questionService" class="ru.lpfun.spring.homework01.dao.QuestionDaoImpl">
+        <constructor-arg index="0"
+                         type="java.lang.String"
+                         value="data/questions.csv"
+        />
+        <constructor-arg index="1"
+                         type="ru.lpfun.spring.homework01.common.interfaces.Parser"
+                         ref="questionCsvParser"
+        />
+    </bean>
+
+    <bean id="questionPrinter" class="ru.lpfun.spring.homework01.services.QuestionPrintServiceImpl">
+    </bean>
+
+    <bean id="examService" class="ru.lpfun.spring.homework01.services.ExamServiceImpl">
+        <constructor-arg index="0"
+                         type="ru.lpfun.spring.homework01.common.interfaces.QuestionDao"
+                         ref="questionService"
+        />
+        <constructor-arg index="1"
+                         type="ru.lpfun.spring.homework01.common.interfaces.QuestionPrintService"
+                         ref="questionPrinter"
+        />
+    </bean>
+
+</beans>
