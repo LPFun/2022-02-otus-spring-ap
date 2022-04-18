@@ -15,14 +15,14 @@ data class QuestionCsv(
     val correctAnswers: String? = null,
 ) {
     fun toModel() = Question(
-        id = number ?: "",
-        question = question ?: "",
+        id = number?.trim() ?: "",
+        question = question?.trim() ?: "",
         answers = answerVariants?.toAnswers() ?: emptyList(),
         correctAnswers = correctAnswers?.toAnswers() ?: emptyList()
     )
 
     private fun String.toAnswers(): List<Answer> {
-        return split(" ").mapIndexed { i, a ->
+        return trim().split(" ").mapIndexed { i, a ->
             Answer(
                 id = i.toString(),
                 answer = a
