@@ -4,23 +4,23 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import ru.lpfun.spring.homework02.common.interfaces.ExamService
 import ru.lpfun.spring.homework02.common.interfaces.QuestionDao
-import ru.lpfun.spring.homework02.common.interfaces.QuestionPrintService
 import ru.lpfun.spring.homework02.services.ExamServiceImpl
-import ru.lpfun.spring.homework02.services.QuestionPrintServiceImpl
+import ru.lpfun.spring.homework02.services.IOService
+import ru.lpfun.spring.homework02.services.IOServiceImpl
 
 @Configuration
 open class ServicesConfig {
 
     @Bean
-    open fun questionPrintService(): QuestionPrintService {
-        return QuestionPrintServiceImpl()
+    open fun examService(
+        questionDao: QuestionDao,
+        questionPrintService: IOService
+    ): ExamService {
+        return ExamServiceImpl(questionDao, questionPrintService)
     }
 
     @Bean
-    open fun examService(
-        questionDao: QuestionDao,
-        questionPrintService: QuestionPrintService
-    ): ExamService {
-        return ExamServiceImpl(questionDao, questionPrintService)
+    open fun ioService(): IOService{
+        return IOServiceImpl(System.`in`, System.out)
     }
 }
