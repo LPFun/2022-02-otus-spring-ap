@@ -7,13 +7,12 @@ import ru.lpfun.spring.homework02.common.interfaces.io.IOService
 import ru.lpfun.spring.homework02.common.model.Answer
 import ru.lpfun.spring.homework02.common.model.ExamResult
 import ru.lpfun.spring.homework02.common.model.Question
-import ru.lpfun.spring.homework02.common.model.Student
 
 class ExamExecutorServiceImpl(
     private val ioService: IOService,
     private val questionDao: QuestionDao
 ) : ExamExecutorService {
-    override fun executeExam(student: Student): ExamResult {
+    override fun executeExam(): ExamResult {
         val questions = questionDao.getQuestions()
         var trueAnswersCount = 0
         ioService.println("Enter correct answer id")

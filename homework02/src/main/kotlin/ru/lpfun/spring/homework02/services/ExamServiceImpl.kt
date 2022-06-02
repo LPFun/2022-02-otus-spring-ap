@@ -15,7 +15,7 @@ class ExamServiceImpl(
         // спросить имя
         val student = identificationStudentService.identificate()
         // задать вопросы
-        val examResult = examExecutorService.executeExam(student)
+        val examResult = examExecutorService.executeExam()
         // вывести результат
         examResultHandlerService.handleExamResult(student, examResult)
     }
