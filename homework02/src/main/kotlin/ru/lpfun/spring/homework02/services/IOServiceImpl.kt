@@ -1,6 +1,6 @@
 package ru.lpfun.spring.homework02.services
 
-import ru.lpfun.spring.homework02.common.interfaces.IOService
+import ru.lpfun.spring.homework02.common.interfaces.io.IOService
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader

@@ -2,21 +2,43 @@ package ru.lpfun.spring.homework02.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import ru.lpfun.spring.homework02.common.interfaces.ExamService
-import ru.lpfun.spring.homework02.common.interfaces.IOService
-import ru.lpfun.spring.homework02.common.interfaces.QuestionDao
-import ru.lpfun.spring.homework02.services.ExamServiceImpl
-import ru.lpfun.spring.homework02.services.IOServiceImpl
+import ru.lpfun.spring.homework02.common.interfaces.*
+import ru.lpfun.spring.homework02.common.interfaces.io.IOService
+import ru.lpfun.spring.homework02.common.model.Student
+import ru.lpfun.spring.homework02.services.*
 
 @Configuration
 open class ServicesConfig {
 
     @Bean
     open fun examService(
-        questionDao: QuestionDao,
-        questionPrintService: IOService
+        authStudentService: AuthenticateService<Student>,
+        examExecutorService: ExamExecutorService,
+        examResultHandlerService: ExamResultHandlerService
     ): ExamService {
-        return ExamServiceImpl(questionDao, questionPrintService)
+        return ExamServiceImpl(
+            authStudentService = authStudentService,
+            examExecutorService = examExecutorService,
+            examResultHandlerService = examResultHandlerService
+        )
+    }
+
+    @Bean
+    open fun authStudentService(ioService: IOService): AuthenticateService<Student> {
+        return AuthenticateStudentService(ioService)
+    }
+
+    @Bean
+    open fun examExecutorService(
+        ioService: IOService,
+        questionDao: QuestionDao
+    ): ExamExecutorService {
+        return ExamExecutorServiceImpl(ioService, questionDao)
+    }
+
+    @Bean
+    open fun examResultHandler(ioService: IOService): ExamResultHandlerService {
+        return ExamResultHandlerServiceImpl(ioService)
     }
 
     @Bean
