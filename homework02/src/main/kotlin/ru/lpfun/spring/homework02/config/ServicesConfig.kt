@@ -12,20 +12,20 @@ open class ServicesConfig {
 
     @Bean
     open fun examService(
-        authStudentService: AuthenticateService<Student>,
+        authStudentService: IdentificationService<Student>,
         examExecutorService: ExamExecutorService,
         examResultHandlerService: ExamResultHandlerService
     ): ExamService {
         return ExamServiceImpl(
-            authStudentService = authStudentService,
+            identificationStudentService = authStudentService,
             examExecutorService = examExecutorService,
             examResultHandlerService = examResultHandlerService
         )
     }
 
     @Bean
-    open fun authStudentService(ioService: IOService): AuthenticateService<Student> {
-        return AuthenticateStudentService(ioService)
+    open fun identificationStudentService(ioService: IOService): IdentificationService<Student> {
+        return IdentificationStudentService(ioService)
     }
 
     @Bean
