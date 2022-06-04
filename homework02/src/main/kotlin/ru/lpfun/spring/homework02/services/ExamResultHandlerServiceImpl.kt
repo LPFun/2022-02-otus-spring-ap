@@ -10,6 +10,7 @@ class ExamResultHandlerServiceImpl(
 ) : ExamResultHandlerService {
     override fun handleExamResult(student: Student, examResult: ExamResult) {
         ioService.println("Exam result:")
+        ioService.println("Exam ${if (examResult.isExamPassed) "passed" else "not passed"}")
         ioService.println("${student.name} answered correctly to ${examResult.trueAnswersCount} questions from ${examResult.questionsCount}")
     }
 }

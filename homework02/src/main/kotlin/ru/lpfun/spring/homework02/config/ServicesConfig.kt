@@ -1,5 +1,6 @@
 package ru.lpfun.spring.homework02.config
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import ru.lpfun.spring.homework02.common.interfaces.*
@@ -31,9 +32,10 @@ open class ServicesConfig {
     @Bean
     open fun examExecutorService(
         ioService: IOService,
-        questionDao: QuestionDao
+        questionDao: QuestionDao,
+        @Value("\${exam.numOfCorrectAnswersToPassExam}") numOfCorrectAnswersToPassExam: Int
     ): ExamExecutorService {
-        return ExamExecutorServiceImpl(ioService, questionDao)
+        return ExamExecutorServiceImpl(ioService, questionDao, numOfCorrectAnswersToPassExam)
     }
 
     @Bean

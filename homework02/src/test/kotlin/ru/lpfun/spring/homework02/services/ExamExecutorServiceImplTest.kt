@@ -29,7 +29,7 @@ internal class ExamExecutorServiceImplTest {
 
     @Test
     fun `Execute exam`() {
-        examExecutorService = ExamExecutorServiceImpl(ioServiceMock, questionDaoMock)
+        examExecutorService = ExamExecutorServiceImpl(ioServiceMock, questionDaoMock, 1)
         val question = Question(
             id = "0",
             question = "question",
@@ -58,7 +58,7 @@ internal class ExamExecutorServiceImplTest {
     fun `Execute exame with io check`() {
         val mockIOService = MockIOService()
         mockIOService.inputArr.add("0")
-        examExecutorService = ExamExecutorServiceImpl(mockIOService, questionDaoMock)
+        examExecutorService = ExamExecutorServiceImpl(mockIOService, questionDaoMock, 1)
         val question = Question(
             id = "0",
             question = "question",

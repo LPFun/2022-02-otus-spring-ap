@@ -38,6 +38,8 @@ internal class IdentificationStudentServiceTest() {
 
     @Test
     fun `Enter empty name test`() {
+        identificationStudentService = IdentificationStudentService(ioService)
+
         every { ioService.getInput() } returns ""
         every { ioService.print(allAny()) } answers { println(args[0]) }
 

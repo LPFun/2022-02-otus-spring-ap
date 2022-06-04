@@ -29,13 +29,13 @@ internal class ExamResultHandlerServiceImplTest {
     @Test
     fun `Print exam result`() {
         val stubStudent = Student("student name")
-        val stubExamResult = ExamResult(10, 5)
+        val stubExamResult = ExamResult(10, 5, true)
 
         every { ioServiceMock.println(allAny()) } answers { println(args[0]) }
 
         examResultHandlerService.handleExamResult(stubStudent, stubExamResult)
 
-        verify(exactly = 2) {
+        verify(exactly = 3) {
             ioServiceMock.println(allAny())
         }
     }
@@ -43,7 +43,7 @@ internal class ExamResultHandlerServiceImplTest {
     @Test
     fun `Printed exam data`() {
         val student = Student("student name")
-        val examResult = ExamResult(10, 5)
+        val examResult = ExamResult(10, 5, true)
 
         val ioServiceMock = MockIOService()
         examResultHandlerService = ExamResultHandlerServiceImpl(ioServiceMock)

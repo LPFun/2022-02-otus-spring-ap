@@ -10,7 +10,8 @@ import ru.lpfun.spring.homework02.common.model.Question
 
 class ExamExecutorServiceImpl(
     private val ioService: IOService,
-    private val questionDao: QuestionDao
+    private val questionDao: QuestionDao,
+    private val passExamNumOfAnswers: Int
 ) : ExamExecutorService {
     override fun executeExam(): ExamResult {
         val questions = questionDao.getQuestions()
@@ -25,7 +26,7 @@ class ExamExecutorServiceImpl(
                 trueAnswersCount += 1
             }
         }
-        return ExamResult(questions.size, trueAnswersCount)
+        return ExamResult(questions.size, trueAnswersCount, trueAnswersCount >= passExamNumOfAnswers)
     }
 
     private fun printQuestion(question: Question, outputService: OutputService) {
