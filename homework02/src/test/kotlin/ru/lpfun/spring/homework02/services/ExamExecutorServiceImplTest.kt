@@ -37,7 +37,7 @@ internal class ExamExecutorServiceImplTest {
             correctAnswers = listOf(Answer("0", "answer"))
         )
         every { questionDaoMock.getQuestions() } returns listOf(question)
-        every { ioServiceMock.getInput() } returns "0"
+        every { ioServiceMock.getInput() } returns "1"
         every { ioServiceMock.println(allAny()) } just Runs
         every { ioServiceMock.print(allAny()) } just Runs
 
@@ -57,7 +57,7 @@ internal class ExamExecutorServiceImplTest {
     @Test
     fun `Execute exame with io check`() {
         val mockIOService = MockIOService()
-        mockIOService.inputArr.add("0")
+        mockIOService.inputArr.add("1")
         examExecutorService = ExamExecutorServiceImpl(mockIOService, questionDaoMock, 1)
         val question = Question(
             id = "0",

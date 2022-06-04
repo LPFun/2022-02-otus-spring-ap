@@ -27,6 +27,6 @@ data class QuestionCsv(
                 id = i.toString(),
                 answer = a
             )
-        }
+        }.shuffled()
     }
 }

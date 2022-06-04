@@ -20,7 +20,11 @@ class ExamExecutorServiceImpl(
         questions.forEach { q ->
             printQuestion(q, ioService)
             val answerId = ioService.getInput()
-            val answer = q.answers.find { it.id == answerId } ?: Answer.NONE
+            val answer = try {
+                q.answers[answerId.toInt() - 1]
+            } catch (e: Exception) {
+                Answer.NONE
+            }
             val isCorrect = isCorrectAnswer(answer, q.correctAnswers)
             if (isCorrect) {
                 trueAnswersCount += 1
@@ -33,7 +37,7 @@ class ExamExecutorServiceImpl(
         outputService.print("${question.id}) ${question.question}")
         outputService.print(System.lineSeparator())
         question.answers.forEachIndexed { i, a ->
-            outputService.print(" ${i})${a.answer}")
+            outputService.print(" ${i + 1})${a.answer}")
         }
         outputService.print(System.lineSeparator())
     }
