@@ -56,9 +56,21 @@ internal class ExamExecutorServiceImplTest {
 
     @Test
     fun `Execute exame with io check`() {
-        val mockIOService = MockIOService()
-        mockIOService.inputArr.add("1")
-        examExecutorService = ExamExecutorServiceImpl(mockIOService, questionDaoMock, 1)
+        val outPutArr = mutableListOf<String>()
+
+        every {
+            ioServiceMock.getInput()
+        } returns "1"
+
+        every {
+            ioServiceMock.print(capture(outPutArr))
+        } just Runs
+
+        every {
+            ioServiceMock.println(capture(outPutArr))
+        } just Runs
+
+        examExecutorService = ExamExecutorServiceImpl(ioServiceMock, questionDaoMock, 1)
         val question = Question(
             id = "0",
             question = "question",
@@ -70,7 +82,9 @@ internal class ExamExecutorServiceImplTest {
 
         val examResult = examExecutorService.executeExam()
 
-        mockIOService.outPutArr.run {
+        println(outPutArr)
+
+        outPutArr.run {
             assertTrue {
                 isNotEmpty()
                 any { it.contains("question") }
@@ -82,6 +96,9 @@ internal class ExamExecutorServiceImplTest {
 
         verify {
             questionDaoMock.getQuestions()
+            ioServiceMock.getInput()
+            ioServiceMock.println(allAny())
+            ioServiceMock.print(allAny())
         }
     }
 }

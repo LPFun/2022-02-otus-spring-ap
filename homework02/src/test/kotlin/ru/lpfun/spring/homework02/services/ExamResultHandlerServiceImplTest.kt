@@ -1,8 +1,10 @@
 package ru.lpfun.spring.homework02.services
 
+import io.mockk.Runs
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.just
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -44,16 +46,22 @@ internal class ExamResultHandlerServiceImplTest {
     fun `Printed exam data`() {
         val student = Student("student name")
         val examResult = ExamResult(10, 5, true)
+        val outPutArr = mutableListOf<String>()
 
-        val ioServiceMock = MockIOService()
+        every { ioServiceMock.println(capture(outPutArr)) } just Runs
+
         examResultHandlerService = ExamResultHandlerServiceImpl(ioServiceMock)
 
         examResultHandlerService.handleExamResult(student, examResult)
 
-        ioServiceMock.outPutArr.run {
+        outPutArr.run {
             assertTrue(last().contains(student.name))
             assertTrue(last().contains(examResult.trueAnswersCount.toString()))
             assertTrue(last().contains(examResult.questionsCount.toString()))
+        }
+
+        verify {
+            ioServiceMock.println(allAny())
         }
     }
 }
