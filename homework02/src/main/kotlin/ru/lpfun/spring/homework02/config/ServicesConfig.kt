@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import ru.lpfun.spring.homework02.common.interfaces.*
 import ru.lpfun.spring.homework02.common.interfaces.io.IOService
-import ru.lpfun.spring.homework02.common.model.Student
 import ru.lpfun.spring.homework02.services.*
 
 @Configuration
@@ -13,7 +12,7 @@ open class ServicesConfig {
 
     @Bean
     open fun examService(
-        authStudentService: IdentificationService<Student>,
+        authStudentService: IdentificationStudentService,
         examExecutorService: ExamExecutorService,
         examResultHandlerService: ExamResultHandlerService
     ): ExamService {
@@ -25,8 +24,8 @@ open class ServicesConfig {
     }
 
     @Bean
-    open fun identificationStudentService(ioService: IOService): IdentificationService<Student> {
-        return IdentificationStudentService(ioService)
+    open fun identificationStudentService(ioService: IOService): IdentificationStudentService {
+        return IdentificationStudentServiceImpl(ioService)
     }
 
     @Bean

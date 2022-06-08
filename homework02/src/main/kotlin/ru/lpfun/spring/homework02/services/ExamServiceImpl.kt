@@ -3,11 +3,10 @@ package ru.lpfun.spring.homework02.services
 import ru.lpfun.spring.homework02.common.interfaces.ExamExecutorService
 import ru.lpfun.spring.homework02.common.interfaces.ExamResultHandlerService
 import ru.lpfun.spring.homework02.common.interfaces.ExamService
-import ru.lpfun.spring.homework02.common.interfaces.IdentificationService
-import ru.lpfun.spring.homework02.common.model.Student
+import ru.lpfun.spring.homework02.common.interfaces.IdentificationStudentService
 
 class ExamServiceImpl(
-    private val identificationStudentService: IdentificationService<Student>,
+    private val identificationStudentService: IdentificationStudentService,
     private val examExecutorService: ExamExecutorService,
     private val examResultHandlerService: ExamResultHandlerService
 ) : ExamService {
