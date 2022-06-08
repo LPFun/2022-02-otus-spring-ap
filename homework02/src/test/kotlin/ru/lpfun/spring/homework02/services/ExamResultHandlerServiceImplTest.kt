@@ -1,22 +1,22 @@
 package ru.lpfun.spring.homework02.services
 
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import ru.lpfun.spring.homework02.common.interfaces.ExamResultHandlerService
 import ru.lpfun.spring.homework02.common.interfaces.io.IOService
 import ru.lpfun.spring.homework02.common.model.ExamResult
 import ru.lpfun.spring.homework02.common.model.Student
 import kotlin.test.assertTrue
 
-@ExtendWith(SpringExtension::class)
+@ExtendWith(MockKExtension::class)
 internal class ExamResultHandlerServiceImplTest {
 
-    @MockkBean
+    @MockK
     private lateinit var ioServiceMock: IOService
 
     private lateinit var examResultHandlerService: ExamResultHandlerService

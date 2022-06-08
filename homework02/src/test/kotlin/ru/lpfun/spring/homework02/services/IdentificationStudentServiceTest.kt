@@ -1,20 +1,20 @@
 package ru.lpfun.spring.homework02.services
 
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import ru.lpfun.spring.homework02.common.interfaces.IdentificationService
 import ru.lpfun.spring.homework02.common.interfaces.io.IOService
 import ru.lpfun.spring.homework02.common.model.Student
 import kotlin.test.assertEquals
 
-@ExtendWith(SpringExtension::class)
+@ExtendWith(MockKExtension::class)
 internal class IdentificationStudentServiceTest() {
 
-    @MockkBean
+    @MockK
     private lateinit var ioService: IOService
 
     private lateinit var identificationStudentService: IdentificationService<Student>

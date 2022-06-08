@@ -1,28 +1,28 @@
 package ru.lpfun.spring.homework02.services
 
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.Runs
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.just
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import ru.lpfun.spring.homework02.common.interfaces.ExamExecutorService
 import ru.lpfun.spring.homework02.common.interfaces.QuestionDao
 import ru.lpfun.spring.homework02.common.interfaces.io.IOService
 import ru.lpfun.spring.homework02.common.model.Answer
 import ru.lpfun.spring.homework02.common.model.Question
 
-@ExtendWith(SpringExtension::class)
+@ExtendWith(MockKExtension::class)
 internal class ExamExecutorServiceImplTest {
 
-    @MockkBean
+    @MockK
     private lateinit var ioServiceMock: IOService
 
-    @MockkBean
+    @MockK
     private lateinit var questionDaoMock: QuestionDao
 
     private lateinit var examExecutorService: ExamExecutorService

@@ -1,20 +1,20 @@
 package ru.lpfun.spring.homework02.dao
 
-import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.test.context.junit.jupiter.SpringExtension
 import ru.lpfun.spring.homework02.common.interfaces.Parser
 import ru.lpfun.spring.homework02.parser.QuestionCsv
 
-@ExtendWith(SpringExtension::class)
+@ExtendWith(MockKExtension::class)
 internal class QuestionDaoImplTest {
 
-    @MockkBean
+    @MockK
     private lateinit var parserMock: Parser<QuestionCsv>
 
     @Test
