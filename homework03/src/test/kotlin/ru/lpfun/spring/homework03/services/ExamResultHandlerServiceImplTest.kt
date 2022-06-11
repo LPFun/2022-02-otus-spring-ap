@@ -1,0 +1,69 @@
+package ru.lpfun.spring.homework02.services
+
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
+import io.mockk.just
+import io.mockk.verify
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import ru.lpfun.spring.homework03.common.interfaces.ExamResultHandlerService
+import ru.lpfun.spring.homework03.common.interfaces.io.IOService
+import ru.lpfun.spring.homework03.common.model.ExamResult
+import ru.lpfun.spring.homework03.common.model.Student
+import ru.lpfun.spring.homework03.services.ExamResultHandlerServiceImpl
+import kotlin.test.assertTrue
+
+@ExtendWith(MockKExtension::class)
+internal class ExamResultHandlerServiceImplTest {
+
+    @MockK
+    private lateinit var ioServiceMock: IOService
+
+    private lateinit var examResultHandlerService: ExamResultHandlerService
+
+    @BeforeEach
+    fun setUp() {
+        examResultHandlerService = ExamResultHandlerServiceImpl(ioServiceMock)
+    }
+
+    @Test
+    fun `Print exam result`() {
+        val stubStudent = Student("student name")
+        val stubExamResult = ExamResult(10, 5, true)
+
+        every { ioServiceMock.println(allAny()) } answers { println(args[0]) }
+
+        examResultHandlerService.handleExamResult(stubStudent, stubExamResult)
+
+        verify(exactly = 3) {
+            ioServiceMock.println(allAny())
+        }
+    }
+
+    @Test
+    fun `Printed exam data`() {
+        val student = Student("student name")
+        val examResult = ExamResult(10, 5, true)
+        val outPutArr = mutableListOf<String>()
+
+        every { ioServiceMock.println(capture(outPutArr)) } just Runs
+
+        examResultHandlerService = ExamResultHandlerServiceImpl(ioServiceMock)
+
+        examResultHandlerService.handleExamResult(student, examResult)
+
+        outPutArr.run {
+            assertTrue(last().contains(student.name))
+            assertTrue(last().contains(examResult.trueAnswersCount.toString()))
+            assertTrue(last().contains(examResult.questionsCount.toString()))
+        }
+
+        verify {
+            ioServiceMock.println(allAny())
+        }
+    }
+}
+
