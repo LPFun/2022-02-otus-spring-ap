@@ -1,4 +1,4 @@
-package ru.lpfun.spring.homework02.dao
+package ru.lpfun.spring.homework03.dao
 
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import ru.lpfun.spring.homework03.common.interfaces.Parser
-import ru.lpfun.spring.homework03.dao.QuestionDaoImpl
+import ru.lpfun.spring.homework03.config.ExamProps
 import ru.lpfun.spring.homework03.parser.QuestionCsv
 
 @ExtendWith(MockKExtension::class)
@@ -18,10 +18,12 @@ internal class QuestionDaoImplTest {
     @MockK
     private lateinit var parserMock: Parser<QuestionCsv>
 
+    @MockK
+    private lateinit var propsMock: ExamProps
+
     @Test
     fun `Parse questions`() {
-        val path = "path"
-        val questionDao = QuestionDaoImpl(path, parserMock)
+        val questionDao = QuestionDaoImpl(propsMock, parserMock)
         val questionCsv = QuestionCsv(
             "0",
             "question",
@@ -29,7 +31,9 @@ internal class QuestionDaoImplTest {
             "answer1"
         )
 
-        every { parserMock.parse(path) } returns listOf(questionCsv)
+        val pathMock = "path"
+        every { propsMock.filePath } returns pathMock
+        every { parserMock.parse(pathMock) } returns listOf(questionCsv)
 
         val question = questionDao.getQuestions().first()
 
@@ -44,7 +48,8 @@ internal class QuestionDaoImplTest {
         }
 
         verify {
-            parserMock.parse(path)
+            propsMock.filePath
+            parserMock.parse(pathMock)
         }
     }
 }

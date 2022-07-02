@@ -1,5 +1,6 @@
 package ru.lpfun.spring.homework03.services
 
+import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import ru.lpfun.spring.homework03.common.interfaces.ExamExecutorService
 import ru.lpfun.spring.homework03.common.interfaces.OutputService
@@ -9,18 +10,20 @@ import ru.lpfun.spring.homework03.common.model.Answer
 import ru.lpfun.spring.homework03.common.model.ExamResult
 import ru.lpfun.spring.homework03.common.model.Question
 import ru.lpfun.spring.homework03.config.ExamProps
+import java.util.*
 
 @Service
 class ExamExecutorServiceImpl(
     private val ioService: IOService,
     private val questionDao: QuestionDao,
-    private val examProps: ExamProps
+    private val examProps: ExamProps,
+    private val messageSource: MessageSource
 ) : ExamExecutorService {
 
     override fun executeExam(): ExamResult {
         val questions = questionDao.getQuestions()
         var trueAnswersCount = 0
-        ioService.println("Enter correct answer id")
+        ioService.println(messageSource.getMessage("exam.instruction", null, Locale.getDefault()))
         questions.forEach { q ->
             printQuestion(q, ioService)
             val answerId = ioService.getInput()
