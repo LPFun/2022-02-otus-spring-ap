@@ -1,17 +1,16 @@
 package ru.lpfun.spring.homework03
 
-import org.springframework.context.ConfigurableApplicationContext
-import ru.lpfun.spring.homework03.services.ExamServiceImpl
+import org.springframework.boot.ApplicationArguments
+import org.springframework.boot.ApplicationRunner
+import org.springframework.stereotype.Component
+import ru.lpfun.spring.homework03.common.interfaces.ExamService
 
+@Component
 class AppRunner(
-    private val context: ConfigurableApplicationContext
-) {
-    fun run() {
-        val examService = context.getBean(ExamServiceImpl::class.java)
-        examService.exam()
-    }
+    private val examService: ExamService
+) : ApplicationRunner {
 
-    fun close() {
-        context.close()
+    override fun run(args: ApplicationArguments?) {
+        examService.exam()
     }
 }

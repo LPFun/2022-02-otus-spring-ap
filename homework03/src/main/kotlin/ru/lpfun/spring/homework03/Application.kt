@@ -10,6 +10,5 @@ import ru.lpfun.spring.homework03.config.ExamProps
 class Application
 
 fun main(args: Array<String>) {
-	val context = runApplication<Application>(*args)
-	AppRunner(context).run()
+	runApplication<Application>(*args)
 }
