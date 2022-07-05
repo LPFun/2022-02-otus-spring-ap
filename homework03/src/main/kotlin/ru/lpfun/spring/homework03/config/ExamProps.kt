@@ -8,4 +8,5 @@ import org.springframework.boot.context.properties.ConstructorBinding
 data class ExamProps(
     val filePath: String,
     val numOfCorrectAnswersToPassExam: Int,
+    val lang: String
 )
