@@ -11,9 +11,9 @@ import java.util.*
 class MsgProviderImpl(
     private val ioService: IOService,
     private val messageSource: MessageSource,
-    private val examProps: ExamProps
+    private val examProps: ExamProps,
 ) : MsgProvider {
-    private val locale = Locale(examProps.lang)
+    private val locale: Locale = Locale(examProps.lang)
 
     override fun printMsg(code: String, args: Array<out Any>?) {
         ioService.print(getMsg(code, args))

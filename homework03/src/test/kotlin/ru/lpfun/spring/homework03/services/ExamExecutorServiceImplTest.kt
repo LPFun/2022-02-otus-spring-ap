@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.context.MessageSource
 import ru.lpfun.spring.homework03.common.interfaces.ExamExecutorService
+import ru.lpfun.spring.homework03.common.interfaces.MsgProvider
 import ru.lpfun.spring.homework03.common.interfaces.QuestionDao
 import ru.lpfun.spring.homework03.common.interfaces.io.IOService
 import ru.lpfun.spring.homework03.common.model.Answer
@@ -31,13 +31,13 @@ internal class ExamExecutorServiceImplTest {
     private lateinit var props: ExamProps
 
     @MockK
-    private lateinit var messageSource: MessageSource
+    private lateinit var msgProvider: MsgProvider
 
     private lateinit var examExecutorService: ExamExecutorService
 
     @Test
     fun `Execute exam`() {
-        examExecutorService = ExamExecutorServiceImpl(ioServiceMock, questionDaoMock, props, messageSource)
+        examExecutorService = ExamExecutorServiceImpl(ioServiceMock, questionDaoMock, props, msgProvider)
         val question = Question(
             id = "0",
             question = "question",
@@ -45,12 +45,10 @@ internal class ExamExecutorServiceImplTest {
             correctAnswers = listOf(Answer("0", "answer"))
         )
 
-        val instructionMsg = "Enter correct answer id"
-        every { messageSource.getMessage(allAny(), allAny(), allAny()) } returns instructionMsg
+        every { msgProvider.printlnMsg("exam.instruction") } just Runs
         every { props.numOfCorrectAnswersToPassExam } returns 1
         every { questionDaoMock.getQuestions() } returns listOf(question)
         every { ioServiceMock.getInput() } returns "1"
-        every { ioServiceMock.println(instructionMsg) } just Runs
         every { ioServiceMock.print(allAny()) } just Runs
 
         val examResult = examExecutorService.executeExam()
@@ -59,10 +57,8 @@ internal class ExamExecutorServiceImplTest {
         assertEquals(1, examResult.trueAnswersCount)
 
         verify {
-            messageSource.getMessage(allAny(), allAny(), allAny())
             props.numOfCorrectAnswersToPassExam
             questionDaoMock.getQuestions()
-            ioServiceMock.println(instructionMsg)
             ioServiceMock.print(allAny())
             ioServiceMock.getInput()
         }
@@ -71,7 +67,7 @@ internal class ExamExecutorServiceImplTest {
     @Test
     fun `Execute exam with io check`() {
         val outPutArr = mutableListOf<String>()
-        examExecutorService = ExamExecutorServiceImpl(ioServiceMock, questionDaoMock, props, messageSource)
+        examExecutorService = ExamExecutorServiceImpl(ioServiceMock, questionDaoMock, props, msgProvider)
         val question = Question(
             id = "0",
             question = "question",
@@ -79,10 +75,8 @@ internal class ExamExecutorServiceImplTest {
             correctAnswers = listOf(Answer("0", "answer"))
         )
 
-        val instructionMsg = "Enter correct answer id"
-        every { messageSource.getMessage(allAny(), allAny(), allAny()) } returns instructionMsg
+        every { msgProvider.printlnMsg("exam.instruction") } just Runs
         every { ioServiceMock.getInput() } returns "1"
-        every { ioServiceMock.println(instructionMsg) } just Runs
         every { ioServiceMock.print(capture(outPutArr)) } just Runs
         every { props.numOfCorrectAnswersToPassExam } returns 1
         every { questionDaoMock.getQuestions() } returns listOf(question)
@@ -100,10 +94,9 @@ internal class ExamExecutorServiceImplTest {
         assertEquals(1, examResult.trueAnswersCount)
 
         verify {
-            messageSource.getMessage(allAny(), allAny(), allAny())
+            msgProvider.printlnMsg("exam.instruction")
             questionDaoMock.getQuestions()
             ioServiceMock.getInput()
-            ioServiceMock.println(allAny())
             ioServiceMock.print(allAny())
         }
     }

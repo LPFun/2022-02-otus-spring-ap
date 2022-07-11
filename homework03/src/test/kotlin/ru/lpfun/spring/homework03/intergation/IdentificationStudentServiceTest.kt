@@ -1,41 +1,40 @@
 package ru.lpfun.spring.homework03.intergation
 
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
-import io.mockk.slot
-import io.mockk.verify
+import com.ninjasquad.springmockk.MockkBean
+import io.mockk.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.MessageSource
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import ru.lpfun.spring.homework03.common.interfaces.IdentificationStudentService
+import ru.lpfun.spring.homework03.common.interfaces.MsgProvider
 import ru.lpfun.spring.homework03.common.interfaces.io.IOService
 import ru.lpfun.spring.homework03.services.IdentificationStudentServiceImpl
-import java.util.*
 
-@SpringBootTest
+@SpringBootTest(classes = [IdentificationStudentServiceImpl::class])
 @ExtendWith(SpringExtension::class)
 internal class IdentificationStudentServiceTest() {
 
-    @MockK
+    @MockkBean
     private lateinit var ioService: IOService
 
+    @MockkBean
+    private lateinit var msgProvider: MsgProvider
+
     @Autowired
-    private lateinit var messageSource: MessageSource
+    private lateinit var identificationStudentService: IdentificationStudentService
 
     @Test
-    fun `enter name test ru locale`() {
-        Locale.setDefault(Locale("ru", "RU"))
-        val outPutMsg = messageSource.getMessage("identification.enter-name", null, Locale.getDefault())
+    fun `enter name test`() {
+        val outPutMsg = "identification.enter-name"
 
         val stubStudentName = "student name"
-        val identificationStudentService = IdentificationStudentServiceImpl(ioService, messageSource)
         val capOutput = slot<String>()
 
+        every { msgProvider.printlnMsg(capture(capOutput)) } just Runs
         every { ioService.getInput() } returns stubStudentName
-        every { ioService.print(capture(capOutput)) } answers { println(args.first()) }
 
         val student = identificationStudentService.identificate()
 
@@ -44,20 +43,19 @@ internal class IdentificationStudentServiceTest() {
 
         verify {
             ioService.getInput()
-            ioService.print(any())
+            msgProvider.printlnMsg(any())
         }
     }
 
     @Test
-    fun `enter empty name test en locale`() {
-        Locale.setDefault(Locale.ENGLISH)
-        val outPutMsg = messageSource.getMessage("identification.enter-name", null, Locale.getDefault())
+    fun `enter empty name test`() {
+        val outPutMsg = "identification.enter-name"
         val capOutput = slot<String>()
 
-        val identificationStudentService = IdentificationStudentServiceImpl(ioService, messageSource)
-
+        every { msgProvider.printlnMsg(capture(capOutput)) } just runs
         every { ioService.getInput() } returns ""
-        every { ioService.print(capture(capOutput)) } answers { println(args.first()) }
+        every { msgProvider.getMsg("identification.unknown") } returns "Unknown"
+
 
         val identified = identificationStudentService.identificate()
 
@@ -66,7 +64,8 @@ internal class IdentificationStudentServiceTest() {
 
         verify {
             ioService.getInput()
-            ioService.print(allAny())
+            msgProvider.printlnMsg(any())
+            msgProvider.getMsg(any())
         }
     }
 }

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import ru.lpfun.spring.homework03.common.interfaces.ExamFilePathProvider
 import ru.lpfun.spring.homework03.common.interfaces.Parser
-import ru.lpfun.spring.homework03.config.ExamProps
 import ru.lpfun.spring.homework03.parser.QuestionCsv
 
 @ExtendWith(MockKExtension::class)
@@ -19,11 +19,11 @@ internal class QuestionDaoImplTest {
     private lateinit var parserMock: Parser<QuestionCsv>
 
     @MockK
-    private lateinit var propsMock: ExamProps
+    private lateinit var filePathProvider: ExamFilePathProvider
 
     @Test
     fun `Parse questions`() {
-        val questionDao = QuestionDaoImpl(propsMock, parserMock)
+        val questionDao = QuestionDaoImpl(filePathProvider, parserMock)
         val questionCsv = QuestionCsv(
             "0",
             "question",
@@ -32,7 +32,7 @@ internal class QuestionDaoImplTest {
         )
 
         val pathMock = "path"
-        every { propsMock.filePath } returns pathMock
+        every { filePathProvider.path() } returns pathMock
         every { parserMock.parse(pathMock) } returns listOf(questionCsv)
 
         val question = questionDao.getQuestions().first()
@@ -48,7 +48,7 @@ internal class QuestionDaoImplTest {
         }
 
         verify {
-            propsMock.filePath
+            filePathProvider.path()
             parserMock.parse(pathMock)
         }
     }

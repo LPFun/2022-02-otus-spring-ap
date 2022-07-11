@@ -17,7 +17,7 @@ class ExamResultHandlerServiceImpl(
                 if (examResult.isExamPassed) "result.passed" else "result.not-passed"
             )
             printlnMsg("result.exam", arrayOf(passedExamText))
-            printMsg(
+            printlnMsg(
                 "result.detailed-result",
                 arrayOf(student.name, examResult.trueAnswersCount, examResult.questionsCount)
             )
