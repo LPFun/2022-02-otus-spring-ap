@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import ru.lpfun.spring.homework03.common.interfaces.ExamFilePathProvider
 import ru.lpfun.spring.homework03.config.ExamProps
 
+@TestPropertySource(properties = ["app.settings.lang=en"])
 @SpringBootTest(classes = [ExamFilePathProviderImpl::class])
 @ExtendWith(SpringExtension::class)
 internal class ExamFilePathProviderImplTest {
@@ -24,10 +26,7 @@ internal class ExamFilePathProviderImplTest {
     @Test
     fun `generate file path`() {
         every { examProps.filePath } returns "data/questions.csv"
-        every { examProps.lang } returns "en"
-
         val filePath = examFilePathProvider.path()
-
         assertEquals("data/questions_en.csv", filePath)
     }
 }

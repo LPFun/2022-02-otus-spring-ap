@@ -5,4 +5,7 @@ spring:
 exam:
   file-path: data/questions.csv
   num-of-correct-answers-to-pass-exam: 3
-  lang: en
+
+app:
+  settings:
+    lang: en

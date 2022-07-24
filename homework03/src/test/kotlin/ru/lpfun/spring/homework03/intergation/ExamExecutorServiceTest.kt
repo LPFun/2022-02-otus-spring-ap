@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import ru.lpfun.spring.homework03.common.interfaces.ExamExecutorService
-import ru.lpfun.spring.homework03.common.interfaces.MsgProvider
+import ru.lpfun.spring.homework03.common.interfaces.MsgPrinter
 import ru.lpfun.spring.homework03.common.interfaces.QuestionDao
 import ru.lpfun.spring.homework03.common.interfaces.io.IOService
 import ru.lpfun.spring.homework03.common.model.Answer
@@ -33,7 +33,7 @@ internal class ExamExecutorServiceTest {
     private lateinit var props: ExamProps
 
     @MockkBean
-    private lateinit var msgProvider: MsgProvider
+    private lateinit var msgPrinter: MsgPrinter
 
     @Autowired
     private lateinit var examExecutorService: ExamExecutorService
@@ -48,7 +48,7 @@ internal class ExamExecutorServiceTest {
         )
         every { props.numOfCorrectAnswersToPassExam } returns 3
         every { questionDaoMock.getQuestions() } returns listOf(question)
-        every { msgProvider.printlnMsg(any()) } just runs
+        every { msgPrinter.printlnMsg(any()) } just runs
         every { ioServiceMock.getInput() } returns "1"
 //        every { props.lang } returns "en"
     }

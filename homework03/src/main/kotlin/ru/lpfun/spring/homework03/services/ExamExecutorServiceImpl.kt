@@ -2,7 +2,7 @@ package ru.lpfun.spring.homework03.services
 
 import org.springframework.stereotype.Service
 import ru.lpfun.spring.homework03.common.interfaces.ExamExecutorService
-import ru.lpfun.spring.homework03.common.interfaces.MsgProvider
+import ru.lpfun.spring.homework03.common.interfaces.MsgPrinter
 import ru.lpfun.spring.homework03.common.interfaces.QuestionDao
 import ru.lpfun.spring.homework03.common.interfaces.io.IOService
 import ru.lpfun.spring.homework03.common.model.Answer
@@ -15,13 +15,13 @@ class ExamExecutorServiceImpl(
     private val ioService: IOService,
     private val questionDao: QuestionDao,
     private val examProps: ExamProps,
-    private val msgProvider: MsgProvider
+    private val msgPrinter: MsgPrinter
 ) : ExamExecutorService {
 
     override fun executeExam(): ExamResult {
         val questions = questionDao.getQuestions()
         var trueAnswersCount = 0
-        msgProvider.printlnMsg("exam.instruction")
+        msgPrinter.printlnMsg("exam.instruction")
         questions.forEach { q ->
             printQuestion(q)
             val answerId = ioService.getInput()

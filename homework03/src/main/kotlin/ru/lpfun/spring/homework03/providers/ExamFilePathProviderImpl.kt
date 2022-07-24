@@ -1,16 +1,19 @@
 package ru.lpfun.spring.homework03.providers
 
-import org.springframework.stereotype.Service
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import ru.lpfun.spring.homework03.common.interfaces.ExamFilePathProvider
 import ru.lpfun.spring.homework03.config.ExamProps
 import java.util.*
 
-@Service
+@Component
 class ExamFilePathProviderImpl(
-    private val examProps: ExamProps
+    @Value("\${app.settings.lang}")
+    private val lang: String,
+    private val examProps: ExamProps,
 ) : ExamFilePathProvider {
     override fun path(): String {
         val csvFileExtension = ".csv"
-        return "${examProps.filePath.removeSuffix(csvFileExtension)}_${Locale(examProps.lang)}$csvFileExtension"
+        return "${examProps.filePath.removeSuffix(csvFileExtension)}_${Locale(lang)}$csvFileExtension"
     }
 }

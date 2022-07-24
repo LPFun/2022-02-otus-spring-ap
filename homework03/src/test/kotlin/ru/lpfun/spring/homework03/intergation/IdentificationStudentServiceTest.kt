@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import ru.lpfun.spring.homework03.common.interfaces.IdentificationStudentService
+import ru.lpfun.spring.homework03.common.interfaces.MsgPrinter
 import ru.lpfun.spring.homework03.common.interfaces.MsgProvider
 import ru.lpfun.spring.homework03.common.interfaces.io.IOService
 import ru.lpfun.spring.homework03.services.IdentificationStudentServiceImpl
@@ -19,6 +20,9 @@ internal class IdentificationStudentServiceTest() {
 
     @MockkBean
     private lateinit var ioService: IOService
+
+    @MockkBean
+    private lateinit var msgPrinter: MsgPrinter
 
     @MockkBean
     private lateinit var msgProvider: MsgProvider
@@ -33,7 +37,7 @@ internal class IdentificationStudentServiceTest() {
         val stubStudentName = "student name"
         val capOutput = slot<String>()
 
-        every { msgProvider.printlnMsg(capture(capOutput)) } just Runs
+        every { msgPrinter.printlnMsg(capture(capOutput)) } just Runs
         every { ioService.getInput() } returns stubStudentName
 
         val student = identificationStudentService.identificate()
@@ -43,7 +47,7 @@ internal class IdentificationStudentServiceTest() {
 
         verify {
             ioService.getInput()
-            msgProvider.printlnMsg(any())
+            msgPrinter.printlnMsg(any())
         }
     }
 
@@ -52,7 +56,7 @@ internal class IdentificationStudentServiceTest() {
         val outPutMsg = "identification.enter-name"
         val capOutput = slot<String>()
 
-        every { msgProvider.printlnMsg(capture(capOutput)) } just runs
+        every { msgPrinter.printlnMsg(capture(capOutput)) } just runs
         every { ioService.getInput() } returns ""
         every { msgProvider.getMsg("identification.unknown") } returns "Unknown"
 
@@ -64,7 +68,7 @@ internal class IdentificationStudentServiceTest() {
 
         verify {
             ioService.getInput()
-            msgProvider.printlnMsg(any())
+            msgPrinter.printlnMsg(any())
             msgProvider.getMsg(any())
         }
     }
