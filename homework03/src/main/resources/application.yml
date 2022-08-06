@@ -1,0 +1,11 @@
+spring:
+  messages:
+    basename: i18n/messages
+
+exam:
+  file-path: data/questions.csv
+  num-of-correct-answers-to-pass-exam: 3
+
+app:
+  settings:
+    lang: en
