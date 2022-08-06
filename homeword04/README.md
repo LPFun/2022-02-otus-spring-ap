@@ -1,1 +1,0 @@
-### Домашнее задание №3 по курсу Spring framework в Otus
