@@ -8,6 +8,6 @@ class AuthorDto(
 ) {
     fun toModel() = AuthorModel(
         id = id ?: Long.MIN_VALUE,
-        author = author ?: ""
+        authorName = author ?: ""
     )
 }

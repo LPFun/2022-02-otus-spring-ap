@@ -1,5 +1,6 @@
 package ru.lpfun.spring.homework05.dao
 
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
@@ -12,11 +13,21 @@ import java.sql.ResultSet
 class AuthorDaoJdbc(
     private val namedParameterJdbcOperations: NamedParameterJdbcOperations
 ) : IAuthorDao {
-    override fun insert(model: AuthorModel): AuthorModel {
-        namedParameterJdbcOperations.update(
-            "insert into authors (id, name) values (:id, :author)",
-            mapOf("id" to model.id, "author" to model.author)
-        )
+    override fun insertIfNotExists(model: AuthorModel): AuthorModel {
+        val existsAuthor = try {
+            namedParameterJdbcOperations.queryForObject(
+                "select id, name from authors where name=:author",
+                mapOf("author" to model.authorName),
+                AuthorMapper()
+            )
+        } catch (e: EmptyResultDataAccessException) {
+            AuthorDto()
+        }
+        if (existsAuthor?.author != model.authorName)
+            namedParameterJdbcOperations.update(
+                "insert into authors (name) values (:author)",
+                mapOf("id" to model.id, "author" to model.authorName, "authorName" to model.authorName)
+            )
         return model
     }
 
@@ -31,9 +42,17 @@ class AuthorDaoJdbc(
     override fun update(model: AuthorModel): AuthorModel {
         namedParameterJdbcOperations.update(
             "update authors set name=:author where id=:id",
-            mapOf("author" to model.author, "id" to model.id)
+            mapOf("author" to model.authorName, "id" to model.id)
         )
         return model
+    }
+
+    override fun getByName(name: String): AuthorModel {
+        return namedParameterJdbcOperations.queryForObject(
+            "select id, name from authors where name=:name",
+            mapOf("name" to name),
+            AuthorMapper()
+        )?.toModel() ?: AuthorModel.NONE
     }
 
     override fun getAll(): List<AuthorModel> {
@@ -59,6 +78,5 @@ class AuthorDaoJdbc(
                 author = rs.getString("name")
             )
         }
-
     }
 }

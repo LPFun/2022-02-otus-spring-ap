@@ -3,7 +3,7 @@ package ru.lpfun.spring.homework05.common.dao
 import ru.lpfun.spring.homework05.common.models.GenreModel
 
 interface IGenreDao {
-    fun insert(model: GenreModel): GenreModel
+    fun insertIfNotExists(model: GenreModel): GenreModel
 
     fun getById(id: Long): GenreModel
 

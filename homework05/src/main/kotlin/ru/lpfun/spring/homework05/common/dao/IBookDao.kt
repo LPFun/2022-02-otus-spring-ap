@@ -3,8 +3,7 @@ package ru.lpfun.spring.homework05.common.dao
 import ru.lpfun.spring.homework05.common.models.BookModel
 
 interface IBookDao {
-
-    fun insert(model: BookModel): BookModel
+    fun insertIfNotExists(model: BookModel): BookModel
 
     fun getById(id: Long): BookModel
 

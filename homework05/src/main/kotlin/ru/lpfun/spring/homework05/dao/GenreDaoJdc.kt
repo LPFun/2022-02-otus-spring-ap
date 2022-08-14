@@ -1,5 +1,6 @@
 package ru.lpfun.spring.homework05.dao
 
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
@@ -12,12 +13,21 @@ import java.sql.ResultSet
 class GenreDaoJdc(
     private val namedParameterJdbcOperations: NamedParameterJdbcOperations
 ) : IGenreDao {
-
-    override fun insert(model: GenreModel): GenreModel {
-        namedParameterJdbcOperations.update(
-            "insert into genres (id, name) values (:id, :genre)",
-            mapOf("id" to model.id, "genre" to model.genre)
-        )
+    override fun insertIfNotExists(model: GenreModel): GenreModel {
+        val existsGenre = try {
+            namedParameterJdbcOperations.queryForObject(
+                "select id, name from genres where name=:genre",
+                mapOf("genre" to model.genreName),
+                GenreMapper()
+            )
+        } catch (e: EmptyResultDataAccessException) {
+            GenreDto()
+        }
+        if (existsGenre?.genre != model.genreName)
+            namedParameterJdbcOperations.update(
+                "insert into genres (name) values (:genre)",
+                mapOf("genre" to model.genreName)
+            )
         return model
     }
 
@@ -32,7 +42,7 @@ class GenreDaoJdc(
     override fun update(model: GenreModel): GenreModel {
         namedParameterJdbcOperations.update(
             "update genres set name=:genre where id=:id",
-            mapOf("genre" to model.genre, "id" to model.id)
+            mapOf("genre" to model.genreName, "id" to model.id)
         )
         return model
     }
