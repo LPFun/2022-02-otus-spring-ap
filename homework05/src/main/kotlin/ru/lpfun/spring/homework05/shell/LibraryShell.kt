@@ -3,17 +3,21 @@ package ru.lpfun.spring.homework05.shell
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
+import ru.lpfun.spring.homework05.common.dao.IBookDao
 
 @ShellComponent
-class LibraryShell {
+class LibraryShell(
+    private val bookDao: IBookDao
+) {
 
     @ShellMethod(key = ["books", "all"], value = "Список всех книг")
-    fun displayAllBooks(): String{
-        return "список книг"
+    fun displayAllBooks(): String {
+        val books = bookDao.getAll()
+        return "список книг ${books}"
     }
 
     @ShellMethod(key = ["book", "get"], value = "Книга по ид")
-    fun displayBookById(id: String): String{
+    fun displayBookById(id: String): String {
         return "книга с ид $id"
     }
 
