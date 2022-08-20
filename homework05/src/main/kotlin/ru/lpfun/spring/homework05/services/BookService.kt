@@ -16,7 +16,7 @@ class BookService(
     override fun addBook(book: BookModel): BookModel {
         genreDao.insertIfNotExists(book.genre)
         authorDao.insertIfNotExists(book.author)
-        bookDao.insertIfNotExists(book)
+        bookDao.insert(book)
         return book
     }
 

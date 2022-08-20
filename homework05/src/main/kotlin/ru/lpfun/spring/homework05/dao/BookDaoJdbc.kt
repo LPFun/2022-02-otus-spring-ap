@@ -14,7 +14,7 @@ import java.sql.ResultSet
 class BookDaoJdbc(
     private val namedParameterJdbcOperations: NamedParameterJdbcOperations
 ) : IBookDao {
-    override fun insertIfNotExists(model: BookModel): BookModel {
+    override fun insert(model: BookModel): BookModel {
         namedParameterJdbcOperations.update(
             "insert into books (id, title, author_id, genre_id) " +
                     "values (" +

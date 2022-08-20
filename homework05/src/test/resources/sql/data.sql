@@ -1,3 +1,3 @@
-INSERT INTO GENRES (ID, NAME) VALUES (1, 'Роман-эпопея');
-INSERT INTO AUTHORS (ID, `NAME`) VALUES (1, 'Михаил Шолохов');
-INSERT INTO BOOKS (ID, TITLE, AUTHOR_ID, GENRE_ID) VALUES (1, 'Тихий Дон', 1, 1);
+INSERT INTO AUTHORS (ID, `NAME`) VALUES (0, 'Михаил Шолохов');
+INSERT INTO GENRES (ID, `NAME`) VALUES (0, 'Роман-эпопея');
+INSERT INTO BOOKS (ID, TITLE, AUTHOR_ID, GENRE_ID) VALUES (0, 'Тихий Дон', 0, 0);
